@@ -2,19 +2,18 @@ package com.reiba.ft.entity;
 import com.reiba.ft.exception.CustomException;
 
 public abstract class AbstractArray {
-  protected long arrayID;
-  protected int[] data ;
+  protected long arrayId;
 
   public long getId(){
-    return arrayID;
+    return arrayId;
   }
 
   protected AbstractArray(long id) {
-    this.arrayID = id;
+    this.arrayId = id;
   }
 
   public long getID() {
-    return arrayID;
+    return arrayId;
   }
 
 }
