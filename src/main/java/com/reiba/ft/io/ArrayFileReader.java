@@ -2,7 +2,7 @@ package com.reiba.ft.io;
 
 import com.reiba.ft.entity.IntArray;
 import com.reiba.ft.exception.CustomException;
-import com.reiba.ft.factory.impl.AbstractArrayFactory;
+import com.reiba.ft.factory.impl.ArrayFactory;
 import com.reiba.ft.validation.Validator;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -16,10 +16,10 @@ import org.apache.logging.log4j.Logger;
 public class ArrayFileReader {
   private static final Logger log = LogManager.getLogger(ArrayFileReader.class);
 
-  private final AbstractArrayFactory factory;
+  private final ArrayFactory factory;
   private final Validator validator;
 
-  public ArrayFileReader(AbstractArrayFactory factory, Validator validator) {
+  public ArrayFileReader(ArrayFactory factory, Validator validator) {
     this.factory = factory;
     this.validator = validator;
   }

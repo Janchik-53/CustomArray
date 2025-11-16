@@ -2,7 +2,7 @@ package com.reiba.ft;
 
 import com.reiba.ft.entity.IntArray;
 import com.reiba.ft.exception.CustomException;
-import com.reiba.ft.factory.impl.AbstractArrayFactory;
+import com.reiba.ft.factory.impl.ArrayFactory;
 import com.reiba.ft.factory.IntArrayFactory;
 import com.reiba.ft.io.ArrayFileReader;
 import com.reiba.ft.validation.LineValidator;
@@ -37,7 +37,7 @@ class ArrayFileReaderTest {
 
     Files.writeString(tmp, content, StandardCharsets.UTF_8);
 
-    AbstractArrayFactory factory = new IntArrayFactory();
+    ArrayFactory factory = new IntArrayFactory();
     Validator validator = new LineValidator();
     ArrayFileReader reader = new ArrayFileReader(factory, validator);
 
