@@ -2,7 +2,7 @@ package com.reiba.ft.io;
 
 import com.reiba.ft.entity.IntArray;
 import com.reiba.ft.exception.CustomException;
-import com.reiba.ft.factory.AbstractArrayFactory;
+import com.reiba.ft.factory.impl.AbstractArrayFactory;
 import com.reiba.ft.validation.Validator;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
