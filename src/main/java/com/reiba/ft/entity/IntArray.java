@@ -25,7 +25,9 @@ public class IntArray extends AbstractArray {
   }
 
   public void setData(int[] newData) throws CustomException {
-    if (newData == null) throw new CustomException("newData is null");
+    if (newData == null) {
+      throw new CustomException("newData is null");
+    }
     this.data = Arrays.copyOf(newData,newData.length);
     log.debug("Data updated: len={}", newData.length);
   }
@@ -35,7 +37,9 @@ public class IntArray extends AbstractArray {
   public String toString() {
     StringBuilder sb = new StringBuilder("IntArray{id=").append(arrayId).append(", data=[");
     for (int i = 0; i < data.length; i++) {
-      if (i > 0) sb.append(", ");
+      if (i > 0) {
+        sb.append(", ");
+      }
       sb.append(data[i]);
     }
     return sb.append("]}").toString();
@@ -43,8 +47,12 @@ public class IntArray extends AbstractArray {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null || getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
 
     IntArray other = (IntArray) obj;
 
