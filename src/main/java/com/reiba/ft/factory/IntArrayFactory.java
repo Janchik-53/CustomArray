@@ -1,14 +1,13 @@
 package com.reiba.ft.factory;
-import java.util.concurrent.atomic.AtomicLong;//for generating id
 import com.reiba.ft.entity.IntArray;
 import com.reiba.ft.exception.CustomException;
 import com.reiba.ft.factory.impl.AbstractArrayFactory;
+import com.reiba.ft.util.IdGenerator;
 
 public class IntArrayFactory implements AbstractArrayFactory {
-  private final AtomicLong seq = new AtomicLong(1);
 
   @Override
   public IntArray createInt(int[] data) throws CustomException {
-    return new IntArray(seq.getAndIncrement(), data);
+    return new IntArray(IdGenerator.incrementId(), data);
   }
 }
