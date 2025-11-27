@@ -1,4 +1,4 @@
-package com.reiba.ft.service;
+package com.reiba.ft.service.impl;
 
 import com.reiba.ft.entity.IntArray;
 import com.reiba.ft.exception.CustomException;

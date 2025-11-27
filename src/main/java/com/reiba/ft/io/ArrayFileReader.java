@@ -3,64 +3,83 @@ package com.reiba.ft.io;
 import com.reiba.ft.entity.IntArray;
 import com.reiba.ft.exception.CustomException;
 import com.reiba.ft.factory.impl.ArrayFactory;
-import com.reiba.ft.validation.Validator;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.util.*;
-import java.util.stream.Stream;
+import com.reiba.ft.parser.ArrayParserImpl;
+import com.reiba.ft.parser.impl.ArrayParser;
+import com.reiba.ft.validation.impl.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/** Читает IntArray из .txt; некорректные строки валидатором — WARN и пропуск. */
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
 public class ArrayFileReader {
-  private static final Logger log = LogManager.getLogger(ArrayFileReader.class);
 
-  private final ArrayFactory factory;
-  private final Validator validator;
+  private static final Logger logger = LogManager.getLogger(ArrayFileReader.class);
 
-  public ArrayFileReader(ArrayFactory factory, Validator validator) {
-    this.factory = factory;
-    this.validator = validator;
+  private final ArrayFactory arrayFactory;
+  private final Validator lineValidator;
+  private final ArrayParser lineParser;
+
+  public ArrayFileReader(ArrayFactory arrayFactory, Validator lineValidator) {
+    this(arrayFactory, lineValidator, new ArrayParserImpl());
   }
 
-  public List<IntArray> read(Path path) throws CustomException {
-    if (path == null) throw new CustomException("path is null");
-    if (!Files.exists(path)) throw new CustomException("file not found: " + path);
+  public ArrayFileReader(ArrayFactory arrayFactory,
+                         Validator lineValidator,
+                         ArrayParser lineParser) {
+    this.arrayFactory = arrayFactory;
+    this.lineValidator = lineValidator;
+    this.lineParser = lineParser;
+  }
 
-    String fname = path.getFileName().toString();
-    String ext = fname.contains(".") ? fname.substring(fname.lastIndexOf('.') + 1) : "";
-    if (!"txt".equals(ext)) throw new CustomException("unsupported file extension: " + ext);
+  public List<IntArray> read(Path filePath) throws CustomException {
+    if (filePath == null) {
+      throw new CustomException("filePath is null");
+    }
+    if (!Files.exists(filePath)) {
+      throw new CustomException("file not found: " + filePath);
+    }
 
-    List<IntArray> out = new ArrayList<>();
-    try (Stream<String> lines = Files.lines(path, StandardCharsets.UTF_8)) {
-      final int[] no = {0};
-      lines.forEach(line -> {
-        int n = ++no[0];
-        String trimmed = (line == null) ? "" : line.trim();
-        if (!validator.isValid(trimmed)) {
-          log.warn("Invalid line {} skipped: {}", n, line);
+    List<IntArray> parsedArrays = new ArrayList<>();
+
+    try (Stream<String> fileLines =
+                 Files.lines(filePath, StandardCharsets.UTF_8)) {
+
+      final int[] currentLineNumber = {0};
+
+      fileLines.forEach(rawLine -> {
+        int lineNumber = ++currentLineNumber[0];
+        String trimmedLine = rawLine == null ? "" : rawLine.trim();
+
+        if (!lineValidator.isValid(trimmedLine)) {
+          logger.warn("Line {} skipped as invalid: {}", lineNumber, rawLine);
           return;
         }
-        int[] data = parse(trimmed);
+
+        int[] parsedNumbers = lineParser.parse(trimmedLine);
+
         try {
-          out.add(factory.createInt(data));  // ← ИСПОЛЬЗУЕМ createInt(...)
-        } catch (Exception e) {
-          log.error("Cannot create array from line {}: {}", n, e.getMessage());
+          IntArray arrayObject = arrayFactory.createInt(parsedNumbers);
+          parsedArrays.add(arrayObject);
+        } catch (CustomException creationError) {
+          logger.error(
+                  "Failed to create array on line {}: {}",
+                  lineNumber,
+                  creationError.getMessage()
+          );
         }
       });
-    } catch (IOException e) {
-      throw new CustomException("error reading file: " + e.getMessage());
-    }
-    log.info("Read {} arrays from {}", out.size(), path);
-    return out;
-  }
 
-  private static int[] parse(String s) {
-    if (s.isEmpty()) return new int[0];
-    String[] tokens = s.split("(,|;|\\s+|\\s*[–-]\\s+)");
-    int[] a = new int[tokens.length];
-    for (int i = 0; i < tokens.length; i++) a[i] = Integer.parseInt(tokens[i].trim());
-    return a;
+    } catch (IOException ioError) {
+      throw new CustomException("error reading file: " + ioError.getMessage());
+    }
+
+    logger.info("Successfully read {} arrays from {}", parsedArrays.size(), filePath);
+    return parsedArrays;
   }
 }

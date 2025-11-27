@@ -1,7 +1,7 @@
 package com.reiba.ft;
 
-import com.reiba.ft.service.SortingService;
-import com.reiba.ft.service.impl.SortingServiceImpl;
+import com.reiba.ft.service.impl.SortingService;
+import com.reiba.ft.service.SortingServiceImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

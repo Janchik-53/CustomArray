@@ -6,7 +6,7 @@ import com.reiba.ft.factory.impl.ArrayFactory;
 import com.reiba.ft.factory.IntArrayFactory;
 import com.reiba.ft.io.ArrayFileReader;
 import com.reiba.ft.validation.LineValidator;
-import com.reiba.ft.validation.Validator;
+import com.reiba.ft.validation.impl.Validator;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

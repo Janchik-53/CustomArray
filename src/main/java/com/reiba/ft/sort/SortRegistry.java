@@ -1,22 +1,28 @@
 package com.reiba.ft.sort;
 
+import com.reiba.ft.sort.impl.SortStrategy;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SortRegistry {
-  private final Map<String, SortStrategy> byName;
+
+  private final Map<String, SortStrategy> strategiesByName;
 
   public SortRegistry() {
-    Map<String, SortStrategy> map = new HashMap<>();
-    map.put("quick", new QuickSortStrategy());
-    map.put("merge", new MergeSortStrategy());
-    map.put("insertion", new InsertionSortStrategy());
-    this.byName = Collections.unmodifiableMap(map);
+    Map<String, SortStrategy> strategyMap = new HashMap<>();
+    strategyMap.put("quick", new QuickSortStrategy());
+    strategyMap.put("merge", new MergeSortStrategy());
+    strategyMap.put("insertion", new InsertionSortStrategy());
+    this.strategiesByName = Collections.unmodifiableMap(strategyMap);
   }
 
-  public SortStrategy get(String name) {
-    if (name == null) return null;
-    return byName.get(name.toLowerCase());
+  public SortStrategy get(String algorithmName) {
+    if (algorithmName == null) {
+      return null;
+    }
+    String normalizedName = algorithmName.toLowerCase();
+    return strategiesByName.get(normalizedName);
   }
 }

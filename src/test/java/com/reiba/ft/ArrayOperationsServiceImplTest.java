@@ -2,8 +2,8 @@ package com.reiba.ft;
 
 import com.reiba.ft.entity.IntArray;
 import com.reiba.ft.exception.CustomException;
-import com.reiba.ft.service.ArrayOperationsService;
-import com.reiba.ft.service.impl.ArrayOperationsServiceImpl;
+import com.reiba.ft.service.impl.ArrayOperationsService;
+import com.reiba.ft.service.ArrayOperationsServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
